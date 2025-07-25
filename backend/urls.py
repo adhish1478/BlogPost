@@ -16,9 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from blogs import urls as blogs_url
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('accounts.urls')),
-    path('api/', include('blogs.urls'))
+    # For blogs html render
+    path('', include(blogs_url.html_urlpatterns)),
+    # For blogs API endpoints
+    path('api/', include(blogs_url.api_urlpatterns))
 ]
