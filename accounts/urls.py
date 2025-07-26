@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import RegisterView, register_page
+from .views import RegisterView, register_page, login_page
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -12,4 +12,5 @@ urlpatterns=[
     path('api/logout/', TokenBlacklistView.as_view(), name= 'logout'),
     # render html urls
     path('register/', register_page, name='register-page'),
+    path('login/', login_page, name='login-page'),
 ]

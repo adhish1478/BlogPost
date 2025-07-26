@@ -98,8 +98,9 @@ document.getElementById('form').addEventListener('submit', async function(e) {
         localStorage.setItem('access', data.access);
         localStorage.setItem('refresh', data.refresh);
 
-        // Redirect to dashboard
-        window.location.href = '/dashboard/';
+        // Redirect to login page
+        alert('Registration successful! Redirecting to login...');
+        window.location.href = '/login/';
     } else {
         alert(data.detail || 'Registration failed');
     }
