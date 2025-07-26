@@ -1,8 +1,9 @@
 const host= "http://localhost:8000/api"
 
-async function fetchPosts() {
+async function fetchPosts(searchTerm = '') {
     try{
-        const response= await fetch('/api/posts/');
+        const query= searchTerm ? `?search=${encodeURIComponent(searchTerm)}` : '';
+        const response= await fetch(`${host}/posts/${query}`);
         if (!response.ok) {
             throw new Error('Failed to fetch Post from Server');
         }
@@ -48,12 +49,14 @@ async function renderPosts(posts) {
 
 
 }
-fetchPosts();
 
 document.getElementById("searchForm").addEventListener("submit", function (e) {
     e.preventDefault();
     const keyword = document.getElementById("searchInput").value.trim();
     if (keyword) {
-        alert("Search feature not yet implemented."); // You can later implement a query param filter
+        fetchPosts(keyword); // Call the function to fetch posts with the keyword
     }
 });
+
+// Initial fetch of posts
+fetchPosts();

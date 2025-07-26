@@ -7,12 +7,16 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticate
 from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
 from .permissions import IsAuthorOrReadOnly
+from rest_framework import filters
 # Create your views here.
 
 class PostViewSet(ModelViewSet):
     queryset= Post.objects.all().order_by('-created_at')
     serializer_class= PostSerializer
     permission_classes= [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
+    # for search functionality
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['title', 'content']
 
     def perform_create(self, serializer):
         serializer.save(author= self.request.user)
