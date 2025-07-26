@@ -1,0 +1,23 @@
+<!-- Navbar -->
+    <nav
+      class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-4 py-3">
+      <a class="navbar-brand fw-bold" href="/">BlogWorld</a>
+
+      <div class="mx-auto w-50">
+        {% if show_search %}
+        <form id="searchForm" class="d-flex">
+      <input
+        id="searchInput"
+        class="form-control me-2"
+        type="search"
+        placeholder="Search articles..."
+      />
+      <button class="btn btn-outline-dark" type="submit">Search</button>
+    </form>
+    {% endif %}
+      </div>
+      <div class="d-flex">
+        <a href="#" class="btn btn-outline-secondary me-2" data-bs-toggle="modal" data-bs-target="#createPostModal">✍️ Write</a>
+        <div id="accountArea" class="d-flex"></div>
+      </div>
+    </nav>

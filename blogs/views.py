@@ -56,7 +56,7 @@ class CommentViewSet(ModelViewSet):
 
 
 def display_home(request):
-    return render(request, 'blogs/dashboard.html')
+    return render(request, 'blogs/dashboard.html', {'show_search': True})
 
 def post_detail_view(request, post_id):
     return render(request, 'blogs/post_detail.html', {"post_id": post_id})
