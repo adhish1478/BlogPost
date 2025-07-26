@@ -47,3 +47,7 @@ class CommentViewSet(ModelViewSet):
     
     def perform_create(self, serializer):
         serializer.save(author= self.request.user, post_id= self.kwargs['post_pk'])
+
+
+def display_dash(request):
+    return render(request, 'blogs/dashboard.html')
