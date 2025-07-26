@@ -22,9 +22,9 @@ document.getElementById('form').addEventListener('submit', async function(e) {
         localStorage.setItem('access', data.access);
         localStorage.setItem('refresh', data.refresh);
 
-        // Redirect to dashboard
-        alert('Login successful! Redirecting to dashboard...');
-        window.location.href = '/dashboard/';
+        // Redirect to home
+        //alert('Login successful! Redirecting to home...');
+        window.location.href = '/';
     } else {
         alert(data.detail || 'Login failed');
     }

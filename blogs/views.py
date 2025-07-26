@@ -50,8 +50,13 @@ class CommentViewSet(ModelViewSet):
         return Comment.objects.filter(post_id= self.kwargs['post_pk'])
     
     def perform_create(self, serializer):
-        serializer.save(author= self.request.user, post_id= self.kwargs['post_pk'])
+        serializer.save(
+            author= self.request.user,
+            post_id= self.kwargs['post_pk'])
 
 
-def display_dash(request):
+def display_home(request):
     return render(request, 'blogs/dashboard.html')
+
+def post_detail_view(request, post_id):
+    return render(request, 'blogs/post_detail.html', {"post_id": post_id})

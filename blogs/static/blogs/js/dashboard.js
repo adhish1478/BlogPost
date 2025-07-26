@@ -37,11 +37,16 @@ async function renderPosts(posts) {
                 year: 'numeric'
             });
             div.innerHTML= `
-                <h3>${post.title}<h3>
-                <p>${post.content}</p>
+            <h3>
+                    <a href="/posts/${post.id}/" class="text-decoration-none text-dark">
+                        ${post.title}
+                    </a>
+                </h3>
+                <p>${post.content.split(" ").slice(0, 30).join(" ")}...</p>
                 <p><strong>Author:</strong> ${post.author}</p>
                 <p><strong>Created At:</strong> ${formattedDate}</p>
-                <p><strong>🤍:</strong> ${post.likes_count}</p>
+                <p><strong>♥️</strong> ${post.likes_count}</p>
+                <a href="/posts/${post.id}/" class="btn btn-sm btn-outline-primary mt-2">Read More</a>
                 `;
             postList.appendChild(div);
 
@@ -50,20 +55,12 @@ async function renderPosts(posts) {
 
 }
 
-function debounce(func, delay) {
-    let timer;
-    return function (...args) {
-        clearTimeout(timer);
-        timer = setTimeout(() => func.apply(this, args), delay);
-    };
-}
-
-const debouncedSearch = debounce((e) => {
-    const keyword = e.target.value.trim();
-    fetchPosts(keyword);
-}, 300); // delay in ms
-
-document.getElementById("searchInput").addEventListener("input", debouncedSearch);
+document.getElementById("searchInput").addEventListener("input", function () {
+    const keyword = this.value.trim();
+    if (keyword) {
+        fetchPosts(keyword); // Call the function to fetch posts with the keyword
+    }
+});
 
 // Initial fetch of posts
 fetchPosts();
