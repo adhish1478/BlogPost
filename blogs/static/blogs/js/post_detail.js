@@ -152,9 +152,52 @@ document.getElementById("showLikesBtn").addEventListener("click", async function
     new bootstrap.Modal(document.getElementById("likesModal")).show();
 });
 
+// Check if the user has liked the post- uses state to change color of the like button
+const likeBtn = document.getElementById("likeBtn");
+
+async function checkIfUserLiked() {
+    const res = await fetch(`${host}/posts/${postId}/likes/`);
+    const users = await res.json();
+    const currentUserId = localStorage.getItem("user_id");
+
+    const hasLiked = users.some(user => user.id == currentUserId);
+
+    updateLikeBtnStyle(hasLiked);
+}
+
+function updateLikeBtnStyle(liked) {
+    if (liked) {
+        likeBtn.classList.add("btn-liked");
+        likeBtn.classList.remove("btn-unliked");
+        likeBtn.textContent = "♥";
+    } else {
+        likeBtn.classList.remove("btn-liked");
+        likeBtn.classList.add("btn-unliked");
+        likeBtn.textContent = "🤍";
+    }
+}
+
+likeBtn.addEventListener("click", async () => {
+    const res = await fetch(`${host}/posts/${postId}/toggle_like/`, {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${localStorage.getItem("access")}`
+        }
+    });
+
+    if (res.ok) {
+        const data = await res.json();
+        document.getElementById("postLikes").textContent = data["likes count"];
+        checkIfUserLiked(); // recheck state and update color
+    } else {
+        alert("Failed to like/unlike the post.");
+    }
+});
+
 document.getElementById("likeBtn").addEventListener("click", toggleLike);
 document
   .getElementById("commentForm")
   .addEventListener("submit", submitComment);
 loadPostDetails();
 loadComments();
+checkIfUserLiked();

@@ -104,3 +104,15 @@ button#likeBtn {
     border-radius: 6px;
     margin-top: 10px;
 }
+
+.btn-liked {
+    background-color: #dc3545; /* Bootstrap danger */
+    color: white;
+    border-color: #dc3545;
+}
+
+.btn-unliked {
+    background-color: white;
+    color: #dc3545;
+    border-color: #dc3545;
+}
