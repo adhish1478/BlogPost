@@ -62,5 +62,42 @@ document.getElementById("searchInput").addEventListener("input", function () {
     }
 });
 
+document.getElementById("createPostForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const title = document.getElementById("postTitle").value.trim();
+    const content = document.getElementById("postContent").value.trim();
+
+    if (!title || !content) {
+        alert("Title and content are required.");
+        return;
+    }
+
+    try {
+        const response = await fetch(`${host}/posts/`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("access")}`,
+            },
+            body: JSON.stringify({ title, content }),
+        });
+
+        if (response.ok) {
+            const post = await response.json();
+            // Close modal and reload posts
+            const modal = bootstrap.Modal.getInstance(document.getElementById("createPostModal"));
+            modal.hide();
+            fetchPosts(); // reload post list
+        } else {
+            const err = await response.json();
+            alert(err.detail || "Failed to create post.");
+        }
+    } catch (error) {
+        console.error("Post creation error:", error);
+        alert("Something went wrong while creating post.");
+    }
+});
+
 // Initial fetch of posts
 fetchPosts();
