@@ -8,3 +8,6 @@ from rest_framework.generics import CreateAPIView
 class RegisterView(CreateAPIView):
     queryset= User.objects.all()
     serializer_class= RegisterSerializer
+
+def register_page(request):
+    return render(request, 'accounts/register.html')
