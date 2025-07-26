@@ -50,13 +50,20 @@ async function renderPosts(posts) {
 
 }
 
-document.getElementById("searchForm").addEventListener("submit", function (e) {
-    e.preventDefault();
-    const keyword = document.getElementById("searchInput").value.trim();
-    if (keyword) {
-        fetchPosts(keyword); // Call the function to fetch posts with the keyword
-    }
-});
+function debounce(func, delay) {
+    let timer;
+    return function (...args) {
+        clearTimeout(timer);
+        timer = setTimeout(() => func.apply(this, args), delay);
+    };
+}
+
+const debouncedSearch = debounce((e) => {
+    const keyword = e.target.value.trim();
+    fetchPosts(keyword);
+}, 300); // delay in ms
+
+document.getElementById("searchInput").addEventListener("input", debouncedSearch);
 
 // Initial fetch of posts
 fetchPosts();
