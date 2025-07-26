@@ -1,6 +1,7 @@
 const postId = document.body.dataset.postId;
 const host = "http://localhost:8000/api";
 
+// Function to load post details
 async function loadPostDetails() {
   const res = await fetch(`${host}/posts/${postId}/`);
   const data = await res.json();
@@ -9,8 +10,10 @@ async function loadPostDetails() {
   document.getElementById("postContent").textContent = data.content;
   document.getElementById("postAuthor").textContent = data.author;
   document.getElementById("postLikes").textContent = data.likes_count;
+  document.getElementById("postDate").textContent = new Date(data.created_at).toLocaleString();
 }
 
+// toggleLike function to like/unlike the post
 async function toggleLike() {
   const res = await fetch(`${host}/posts/${postId}/toggle_like/`, {
     method: "POST",
@@ -27,6 +30,7 @@ async function toggleLike() {
   document.getElementById("postLikes").textContent = data["likes count"];
 }
 
+// Function to load comments
 async function loadComments() {
   const res = await fetch(`${host}/posts/${postId}/comments/`);
   const comments = await res.json();
@@ -62,6 +66,7 @@ async function loadComments() {
   });
 }
 
+// Function to handle comment deletion and editing
 async function handleDeleteComment(e) {
   const commentId = e.target.dataset.id;
   const res = await fetch(`${host}/posts/${postId}/comments/${commentId}/`, {
@@ -99,7 +104,7 @@ async function handleEditComment(e) {
   }
 }
 
-
+// Function to submit a new comment
 async function submitComment(e) {
   e.preventDefault();
   const text = document.getElementById("commentText").value;
@@ -124,6 +129,28 @@ async function submitComment(e) {
     alert("Failed to comment.");
   }
 }
+
+// View Likes
+document.getElementById("showLikesBtn").addEventListener("click", async function () {
+    const res = await fetch(`${host}/posts/${postId}/likes/`);
+    const users = await res.json();
+
+    const container = document.getElementById("likesList");
+    container.innerHTML = "";
+
+    if (!users.length) {
+        container.textContent = "No likes yet.";
+        return;
+    }
+
+    users.forEach(user => {
+        const p = document.createElement("p");
+        p.textContent = user.username;
+        container.appendChild(p);
+    });
+
+    new bootstrap.Modal(document.getElementById("likesModal")).show();
+});
 
 document.getElementById("likeBtn").addEventListener("click", toggleLike);
 document
