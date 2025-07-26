@@ -15,14 +15,14 @@ async function toggleLike() {
   const res = await fetch(`${host}/posts/${postId}/toggle_like/`, {
     method: "POST",
     headers: {
-      "Authorization": `Bearer ${localStorage.getItem("access")}`
-    }
+      Authorization: `Bearer ${localStorage.getItem("access")}`,
+    },
   });
-    if (res.status === 401) {
-      alert("Please log in to like this post.");
-      window.location.href = "/login/";
-      return;
-    }
+  if (res.status === 401) {
+    alert("Please log in to like this post.");
+    window.location.href = "/login/";
+    return;
+  }
   const data = await res.json();
   document.getElementById("postLikes").textContent = data["likes count"];
 }
@@ -32,6 +32,7 @@ async function loadComments() {
   const comments = await res.json();
 
   const commentList = document.getElementById("commentsList");
+  const currentUserName= localStorage.getItem('username')
   commentList.innerHTML = "";
 
   if (!comments.length) {
@@ -39,12 +40,63 @@ async function loadComments() {
     return;
   }
 
-  comments.forEach(c => {
+  comments.forEach((c) => {
     const div = document.createElement("div");
     div.className = "comment";
-    div.innerHTML = `<p><strong>${c.author}:</strong> ${c.text}</p>`;
+    div.innerHTML = `
+      <p><strong>${c.author}:</strong> ${c.text}</p>
+      ${c.author === currentUserName ? `
+        <button class="btn btn-sm btn-outline-secondary me-2 edit-comment" data-id="${c.id}">Edit</button>
+        <button class="btn btn-sm btn-outline-danger delete-comment" data-id="${c.id}">Delete</button>
+      ` : ""}
+    `;
     commentList.appendChild(div);
   });
+  // Bind edit/delete
+  document.querySelectorAll(".delete-comment").forEach(btn => {
+    btn.addEventListener("click", handleDeleteComment);
+  });
+
+  document.querySelectorAll(".edit-comment").forEach(btn => {
+    btn.addEventListener("click", handleEditComment);
+  });
+}
+
+async function handleDeleteComment(e) {
+  const commentId = e.target.dataset.id;
+  const res = await fetch(`${host}/posts/${postId}/comments/${commentId}/`, {
+    method: "DELETE",
+    headers: {
+      "Authorization": `Bearer ${localStorage.getItem("access")}`
+    }
+  });
+
+  if (res.ok) {
+    loadComments();
+  } else {
+    alert("Failed to delete comment.");
+  }
+}
+
+async function handleEditComment(e) {
+  const commentId = e.target.dataset.id;
+  const newText = prompt("Edit your comment:");
+  if (!newText) return;
+
+  const res = await fetch(`${host}/posts/${postId}/comments/${commentId}/`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${localStorage.getItem("access")}`
+    },
+    body: JSON.stringify({ text: newText })
+  });
+
+  if (res.ok) {
+    loadComments();
+  } else {
+    alert("Failed to update comment.");
+  }
 }
 
 
@@ -55,16 +107,16 @@ async function submitComment(e) {
   const res = await fetch(`${host}/posts/${postId}/comments/`, {
     method: "POST",
     headers: {
-      "Authorization": `Bearer ${localStorage.getItem("access")}`,
-      "Content-Type": "application/json"
+      Authorization: `Bearer ${localStorage.getItem("access")}`,
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify({ text })
+    body: JSON.stringify({ text }),
   });
-    if (res.status === 401) {
-        alert("Please log in to comment.");
-        window.location.href = "/login/";
-        return;
-    }
+  if (res.status === 401) {
+    alert("Please log in to comment.");
+    window.location.href = "/login/";
+    return;
+  }
   if (res.ok) {
     document.getElementById("commentText").value = "";
     await loadComments(); // Refresh comments
@@ -73,8 +125,9 @@ async function submitComment(e) {
   }
 }
 
-
 document.getElementById("likeBtn").addEventListener("click", toggleLike);
-document.getElementById("commentForm").addEventListener("submit", submitComment);
+document
+  .getElementById("commentForm")
+  .addEventListener("submit", submitComment);
 loadPostDetails();
 loadComments();
