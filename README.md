@@ -3,7 +3,7 @@
 BlogWorld is a minimalistic Medium-inspired blogging platform built with Django and Vanilla JavaScript. It features a clean and responsive UI, user authentication, post creation, liking, commenting, and dynamic interactions using AJAX.
 
 ## Live site link: https://blogpost-qyzf.onrender.com/
-##### ( This is a test site deployed using render, might encounter some errors)
+( This is a test site deployed using render, might encounter some errors)
 ---
 
 ## 🚀 Features
