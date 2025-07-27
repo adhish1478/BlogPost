@@ -103,5 +103,19 @@ document.getElementById("createPostForm").addEventListener("submit", async funct
     }
 });
 
+// Handle "Write Post" button click
+document.getElementById("writeBtn")?.addEventListener("click", (e) => {
+  e.preventDefault();
+  const access = localStorage.getItem("access");
+  
+  if (!access) {
+    alert("You need to log in to write a post.");
+    return;
+  }
+
+  // If logged in, open modal manually
+  const createModal = new bootstrap.Modal(document.getElementById("createPostModal"));
+  createModal.show();
+});
 // Initial fetch of posts
 fetchPosts();
