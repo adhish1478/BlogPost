@@ -40,7 +40,13 @@ class PostViewSet(ModelViewSet):
             {"id": user.id, "username": user.username, "email": user.email}
             for user in users
         ])
-    
+    # List all posts by the authenticated user
+    @action(detail=False, methods=['GET'], permission_classes=[IsAuthenticated])
+    def my_posts(self, request):
+        user = request.user
+        posts = Post.objects.filter(author=user).order_by('-created_at')
+        serializer = self.get_serializer(posts, many=True)
+        return Response(serializer.data)
 
 class CommentViewSet(ModelViewSet):
     serializer_class= CommentSerializer
@@ -60,3 +66,6 @@ def display_home(request):
 
 def post_detail_view(request, post_id):
     return render(request, 'blogs/post_detail.html', {"post_id": post_id})
+
+def my_posts_view(request):
+    return render(request, 'blogs/my_posts.html', {'show_search': False})

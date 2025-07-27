@@ -14,6 +14,7 @@ function updateAccountSection() {
                     Hi, ${username}
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="/my-posts/">📄 My Posts</a></li>
                     <li><a class="dropdown-item" href="#" id="logoutBtn">Logout</a></li>
                 </ul>
             </div>

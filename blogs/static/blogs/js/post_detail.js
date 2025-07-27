@@ -13,23 +13,6 @@ async function loadPostDetails() {
   document.getElementById("postDate").textContent = new Date(data.created_at).toLocaleString();
 }
 
-// toggleLike function to like/unlike the post
-async function toggleLike() {
-  const res = await fetch(`${host}/posts/${postId}/toggle_like/`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("access")}`,
-    },
-  });
-  if (res.status === 401) {
-    alert("Please log in to like this post.");
-    window.location.href = "/login/";
-    return;
-  }
-  const data = await res.json();
-  document.getElementById("postLikes").textContent = data["likes count"];
-}
-
 // Function to load comments
 async function loadComments() {
   const res = await fetch(`${host}/posts/${postId}/comments/`);
@@ -178,23 +161,31 @@ function updateLikeBtnStyle(liked) {
 }
 
 likeBtn.addEventListener("click", async () => {
-    const res = await fetch(`${host}/posts/${postId}/toggle_like/`, {
-        method: "POST",
-        headers: {
-            "Authorization": `Bearer ${localStorage.getItem("access")}`
-        }
-    });
-
-    if (res.ok) {
-        const data = await res.json();
-        document.getElementById("postLikes").textContent = data["likes count"];
-        checkIfUserLiked(); // recheck state and update color
-    } else {
-        alert("Failed to like/unlike the post.");
+  const res = await fetch(`${host}/posts/${postId}/toggle_like/`, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${localStorage.getItem("access")}`
     }
+  });
+
+  if (res.status === 401) {
+    alert("Please log in to like this post.");
+    window.location.href = "/login/";
+    return;
+  }
+
+  if (!res.ok) {
+    const error = await res.json();
+    console.error("Like failed:", error);
+    alert("Failed to like/unlike.");
+    return;
+  }
+
+  const data = await res.json();
+  document.getElementById("postLikes").textContent = data["likes count"];
+  checkIfUserLiked(); // Update button color
 });
 
-document.getElementById("likeBtn").addEventListener("click", toggleLike);
 document
   .getElementById("commentForm")
   .addEventListener("submit", submitComment);
