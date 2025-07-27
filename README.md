@@ -20,8 +20,8 @@ BlogWorld is a minimalistic Medium-inspired blogging platform built with Django 
 
 ## 🔗 API Documentation
 
-👉 Full Postman API Docs: [View on Postman](https://www.postman.com/your-link-here)  
-_(Replace the above link with your actual public Postman link)_
+👉 Full Postman API Docs: [View on Postman](https://.postman.co/workspace/My-Workspace~8e7b8a38-01f1-4a3d-8da1-2f2a76c9c0f4/collection/12390328-1fa6e1d0-e226-4e51-b795-b5d39e493358?action=share&creator=12390328)  
+
 
 ---
 
