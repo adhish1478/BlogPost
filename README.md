@@ -32,8 +32,7 @@ BlogWorld is a minimalistic Medium-inspired blogging platform built with Django 
 | Backend   | Django, Django REST Framework  |
 | Frontend  | Vanilla JavaScript, Bootstrap 5|
 | Auth      | JWT (SimpleJWT)                |
-| Database  | PostgreSQL or SQLite           |
-| Deployment Ready | Render / Railway        |
+| Database  | PostgreSQL                     |
 
 ---
 
