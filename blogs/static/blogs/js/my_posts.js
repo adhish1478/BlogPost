@@ -8,6 +8,13 @@ async function loadMyPosts() {
       Authorization: `Bearer ${token}`
     }
   });
+
+  if (res.status === 401) {
+    alert("Please log in to view your posts.");
+    window.location.href = "/login/";
+    return;
+  }
+
   const posts = await res.json();
 
   const container = document.getElementById("myPostsList");
