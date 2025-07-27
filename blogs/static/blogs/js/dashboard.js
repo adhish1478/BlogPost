@@ -1,4 +1,4 @@
-const host= "http://localhost:8000/api"
+const host= "https://blogpost-qyzf.onrender.com/api"
 
 async function fetchPosts(searchTerm = '') {
     try{
